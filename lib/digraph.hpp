@@ -26,6 +26,9 @@ protected:
   void dfs(const VertexID v, const VertexID w, std::vector<bool> &marked,
            std::vector<VertexID> &edge_to) const;
 
+  void dfs_crawler(const VertexID v, std::vector<bool> &marked,
+                   std::vector<VertexID> &connected_components) const;
+
 public:
   Digraph();
 
@@ -81,4 +84,6 @@ public:
   std::vector<VertexID> path_bfs(const VertexID v, const VertexID w) const;
 
   bool is_connected(const VertexID v, const VertexID w) const;
+
+  std::vector<VertexID> all_connected_vertices(const VertexID v) const;
 };

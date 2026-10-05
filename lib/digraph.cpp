@@ -217,3 +217,28 @@ bool Digraph::is_connected(const VertexID v, const VertexID w) const {
   }
   return true;
 }
+
+std::vector<VertexID> Digraph::all_connected_vertices(const VertexID v) const {
+  if (!this->is_valid_vertex(v)) {
+    return {};
+  }
+
+  std::vector<bool> marked(this->total_vertices(), false);
+  std::vector<VertexID> connected_components{};
+  this->dfs_crawler(v, marked, connected_components);
+
+  return connected_components;
+}
+
+void Digraph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
+                          std::vector<VertexID> &connected_components) const {
+
+  marked[v] = true;
+  connected_components.push_back(v);
+
+  for (const auto adj : this->adjacent_vertices(v)) {
+    if (!marked[adj]) {
+      this->dfs_crawler(adj, marked, connected_components);
+    }
+  }
+}
