@@ -41,5 +41,10 @@ int main() {
 
   fmt::println("Total Vertices: {}", g.vertex_count());
   fmt::println("Total Edges: {}", g.edge_count());
+  for (int i = 0; i < 20; ++i) {
+
+    fmt::println("Connected Components {}: {}", i,
+                 g.all_connected_vertices(vertices[i]));
+  }
   return 0;
 }
