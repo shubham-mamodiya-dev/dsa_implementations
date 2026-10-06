@@ -108,6 +108,9 @@ std::vector<VertexID> Digraph::path_dfs(const VertexID v,
   if (!this->is_valid_vertex(v) || !this->is_valid_vertex(w)) {
     return {};
   }
+  if (v == w) {
+    return {v};
+  }
 
   std::vector<bool> marked(this->total_vertices(), false);
   std::vector<VertexID> edge_to(this->total_vertices());
@@ -161,7 +164,12 @@ size_t Digraph::total_vertices() const { return this->adj.size(); }
 
 std::vector<VertexID> Digraph::path_bfs(const VertexID v,
                                         const VertexID w) const {
-
+  if (!this->is_valid_vertex(v) || !this->is_valid_vertex(w)) {
+    return {};
+  }
+  if (v == w) {
+    return {v};
+  }
   std::queue<VertexID> frontier;
   std::vector<VertexID> edge_to(this->total_vertices());
 
@@ -209,10 +217,16 @@ std::vector<VertexID> Digraph::path_bfs(const VertexID v,
 }
 
 bool Digraph::is_connected(const VertexID v, const VertexID w) const {
-  std::vector<VertexID> temp{this->path_dfs(v, w)};
+  if (!this->is_valid_vertex(v) || !this->is_valid_vertex(w)) {
+    return false;
+  }
+  if (v == w) {
+    return true;
+  }
+  std::vector<VertexID> path{this->path_dfs(v, w)};
 
   // path_dfs always returns path if it exists.
-  if (temp.empty()) {
+  if (path.empty()) {
     return false;
   }
   return true;
