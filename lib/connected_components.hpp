@@ -3,6 +3,12 @@
 #include "digraph.hpp"
 #include "graph.hpp"
 
-class CCDirected {};
+class CCUndirected {
+public:
+  CCUndirected();
+};
 
-class CCUndiredted {};
+class CCDirected {
+public:
+  CCDirected();
+};
