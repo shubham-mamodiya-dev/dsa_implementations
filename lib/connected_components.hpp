@@ -2,14 +2,16 @@
 
 #include "digraph.hpp"
 #include "graph.hpp"
-#include <cstddef>
+#include <cstdint>
 #include <vector>
 
 class CCUndirected {
   Graph graph{};
-  std::vector<VertexID> cc{};
-  size_t count{};
-  size_t component_count{};
+  std::vector<std::int64_t> cc{};
+  int64_t count{};
+  int64_t component_count{};
+
+  int64_t id(const VertexID v) const;
 
 public:
   CCUndirected();
@@ -27,8 +29,11 @@ public:
 
 class CCDirected {
   Digraph digraph{};
-  std::vector<VertexID> cc{};
-  size_t count{};
+  std::vector<int64_t> cc{};
+  int64_t count{};
+  int64_t component_count{};
+
+  int64_t id(const VertexID v) const;
 
 public:
   CCDirected();

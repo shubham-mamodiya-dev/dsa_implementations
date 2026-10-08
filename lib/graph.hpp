@@ -23,8 +23,6 @@ protected:
   std::unordered_set<VertexID> reusable;
   int64_t _edge_count = 0;
 
-  bool is_valid_vertex(const VertexID v) const;
-
   void dfs(const VertexID v, const VertexID w, std::vector<bool> &marked,
            std::vector<VertexID> &edge_to) const;
 
@@ -87,4 +85,5 @@ public:
   bool is_connected(const VertexID v, const VertexID w) const;
 
   std::vector<VertexID> all_connected_vertices(const VertexID v) const;
+  bool is_valid_vertex(const VertexID v) const;
 };
