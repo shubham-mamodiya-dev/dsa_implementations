@@ -29,7 +29,7 @@ protected:
                    std::vector<VertexID> &connected_components) const;
 
   void dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
-                            std::vector<VertexID> &reverse_post_ord) const;
+                            std::stack<VertexID> &reverse_post_ord) const;
 
 public:
   Digraph();

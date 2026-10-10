@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <cstddef>
 #include <queue>
-#include <stack>
 #include <vector>
 
 Digraph::Digraph() = default;
@@ -258,9 +257,10 @@ void Digraph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
     }
   }
 }
+
 void Digraph::dfs_reverse_post_ord(
     const VertexID v, std::vector<bool> &marked,
-    std::vector<VertexID> &reverse_post_ord) const {
+    std::stack<VertexID> &reverse_post_ord) const {
 
   marked[v] = true;
 
@@ -270,17 +270,22 @@ void Digraph::dfs_reverse_post_ord(
     }
   }
 
-  reverse_post_ord.push_back(v);
+  reverse_post_ord.push(v);
 }
 
 std::vector<VertexID> Digraph::topological_sort() const {
-  std::vector<VertexID> reverse_post_ord{};
+  std::stack<VertexID> reverse_post_ord{};
   std::vector<bool> marked(this->total_vertices(), false);
   for (VertexID i{}; i < this->total_vertices(); ++i) {
     if (!marked[i]) {
       this->dfs_reverse_post_ord(i, marked, reverse_post_ord);
     }
   }
+  std::vector<VertexID> copy_reverse_post_ord{};
+  while (!reverse_post_ord.empty()) {
+    copy_reverse_post_ord.push_back(reverse_post_ord.top());
+    reverse_post_ord.pop();
+  }
 
-  return reverse_post_ord;
+  return copy_reverse_post_ord;
 }
