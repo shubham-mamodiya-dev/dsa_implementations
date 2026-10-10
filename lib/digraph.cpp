@@ -276,7 +276,8 @@ void Digraph::dfs_reverse_post_ord(
 std::vector<VertexID> Digraph::topological_sort() const {
   std::stack<VertexID> reverse_post_ord{};
   std::vector<bool> marked(this->total_vertices(), false);
-  for (VertexID i{}; i < this->total_vertices(); ++i) {
+  for (VertexID i{}; i < this->total_vertices() && this->is_valid_vertex(i);
+       ++i) {
     if (!marked[i]) {
       this->dfs_reverse_post_ord(i, marked, reverse_post_ord);
     }
