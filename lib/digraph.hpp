@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stack>
 #include <unordered_set>
 #include <vector>
 
@@ -26,6 +27,9 @@ protected:
 
   void dfs_crawler(const VertexID v, std::vector<bool> &marked,
                    std::vector<VertexID> &connected_components) const;
+
+  void dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
+                            std::vector<VertexID> &reverse_post_ord) const;
 
 public:
   Digraph();
@@ -85,4 +89,6 @@ public:
 
   std::vector<VertexID> all_connected_vertices(const VertexID v) const;
   bool is_valid_vertex(const VertexID v) const;
+
+  std::vector<VertexID> topological_sort() const;
 };
