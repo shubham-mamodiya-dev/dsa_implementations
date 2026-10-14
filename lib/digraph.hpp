@@ -102,4 +102,6 @@ public:
   std::vector<VertexID> get_cycle() const;
 
   bool is_DAG() const;
+
+  Digraph reverse() const;
 };

@@ -143,7 +143,7 @@ void Graph::dfs(const VertexID v, const VertexID w, std::vector<bool> &marked,
 
   marked[v] = true;
 
-  for (const auto adj : this->adjacent_vertices(v)) {
+  for (const auto adj : this->adj[v]) {
     if (!marked[adj]) {
 
       // if we found the destination then just return.
@@ -186,7 +186,7 @@ std::vector<VertexID> Graph::path_bfs(const VertexID v,
   while (!frontier.empty() && !found) {
     auto current{frontier.front()};
 
-    for (const auto adj : this->adjacent_vertices(current)) {
+    for (const auto adj : this->adj[current]) {
       if (!marked[adj]) {
         frontier.push(adj);
         marked[adj] = true;
@@ -251,7 +251,7 @@ void Graph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
   marked[v] = true;
   connected_components.push_back(v);
 
-  for (const auto adj : this->adjacent_vertices(v)) {
+  for (const auto adj : this->adj[v]) {
     if (!marked[adj]) {
       this->dfs_crawler(adj, marked, connected_components);
     }
@@ -292,7 +292,7 @@ void Graph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
   on_stack[v] = true;
   marked[v] = true;
 
-  for (auto const w : this->adjacent_vertices(v)) {
+  for (auto const w : this->adj[v]) {
     bool found_cycle{!cycle.empty()};
     if (found_cycle) {
       return;

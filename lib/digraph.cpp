@@ -147,7 +147,7 @@ void Digraph::dfs(const VertexID v, const VertexID w, std::vector<bool> &marked,
 
   marked[v] = true;
 
-  for (const auto adj : this->adjacent_vertices(v)) {
+  for (const auto adj : this->adj[v]) {
     if (!marked[adj]) {
 
       // if we found the destination then just return.
@@ -189,7 +189,7 @@ std::vector<VertexID> Digraph::path_bfs(const VertexID v,
   while (!frontier.empty() && !found) {
     auto current{frontier.front()};
 
-    for (const auto adj : this->adjacent_vertices(current)) {
+    for (const auto adj : this->adj[current]) {
       if (!marked[adj]) {
         frontier.push(adj);
         marked[adj] = true;
@@ -253,7 +253,7 @@ void Digraph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
   marked[v] = true;
   connected_components.push_back(v);
 
-  for (const auto adj : this->adjacent_vertices(v)) {
+  for (const auto adj : this->adj[v]) {
     if (!marked[adj]) {
       this->dfs_crawler(adj, marked, connected_components);
     }
@@ -266,7 +266,7 @@ void Digraph::dfs_reverse_post_ord(
 
   marked[v] = true;
 
-  for (const auto x : this->adjacent_vertices(v)) {
+  for (const auto x : this->adj[v]) {
     if (!marked[x]) {
       this->dfs_reverse_post_ord(x, marked, reverse_post_ord);
     }
@@ -283,7 +283,7 @@ void Digraph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
   on_stack[v] = true;
   marked[v] = true;
 
-  for (auto const w : this->adjacent_vertices(v)) {
+  for (auto const w : this->adj[v]) {
     bool found_cycle{!cycle.empty()};
     if (found_cycle) {
       return;
@@ -328,6 +328,20 @@ std::vector<VertexID> Digraph::topological_sort() const {
 bool Digraph::has_cycle() const { return get_cycle().empty(); }
 
 bool Digraph::is_DAG() const { return !this->has_cycle(); }
+
+Digraph Digraph::reverse() const {
+
+  Digraph reversed{*this};
+
+  for (VertexID v = 0; v < this->total_vertices(); ++v) {
+    for (const VertexID w : this->adj[v]) {
+      reversed.remove_edge(v, w);
+      reversed.add_edge(w, v);
+    }
+  }
+
+  return reversed;
+}
 
 std::vector<VertexID> Digraph::get_cycle() const {
   std::vector<bool> on_stack(this->total_vertices(), false);
