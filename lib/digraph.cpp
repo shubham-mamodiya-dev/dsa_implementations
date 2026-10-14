@@ -3,6 +3,7 @@
 #include "digraph.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
 #include <cstdlib>
 #include <queue>
 #include <stack>
@@ -301,6 +302,19 @@ void Digraph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
 
   on_stack[v] = false;
 }
+void Digraph::dfs_kosaraju_scc(const VertexID v, const int64_t scc_id,
+                               std::vector<bool> &marked,
+                               std::vector<int64_t> scc) const {
+
+  marked[v] = true;
+  scc[v] = scc_id;
+
+  for (const VertexID w : this->adj[v]) {
+    if (!marked[w]) {
+      this->dfs_kosaraju_scc(w, scc_id, marked, scc);
+    }
+  }
+}
 
 std::vector<VertexID> Digraph::topological_sort() const {
   if (!this->is_DAG()) {
@@ -312,7 +326,7 @@ bool Digraph::has_cycle() const { return get_cycle().empty(); }
 
 bool Digraph::is_DAG() const { return !this->has_cycle(); }
 
-Digraph Digraph::reverse() const {
+Digraph Digraph::reverse_digraph() const {
 
   Digraph reversed{*this};
 
@@ -342,6 +356,20 @@ std::vector<VertexID> Digraph::post_ord() const {
   }
 
   return post_order;
+}
+
+std::vector<int64_t> Digraph::kosaraju_shrir_scc() const {
+  std::vector<bool> marked(this->total_vertices(), false);
+  std::vector<int64_t> scc(this->total_vertices());
+  int64_t scc_id{};
+
+  for (const VertexID v : this->reverse_digraph().reverse_post_ord()) {
+    if (!marked[v] && !this->is_reusable(v)) {
+      this->dfs_kosaraju_scc(v, scc_id++, marked, scc);
+    }
+  }
+
+  return scc;
 }
 
 std::vector<VertexID> Digraph::get_cycle() const {

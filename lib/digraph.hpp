@@ -36,6 +36,10 @@ protected:
                        std::vector<bool> &on_stack,
                        std::stack<VertexID> &cycle) const;
 
+  void dfs_kosaraju_scc(const VertexID v, const int64_t scc_id,
+                        std::vector<bool> &marked,
+                        std::vector<int64_t> scc) const;
+
 public:
   Digraph();
 
@@ -103,9 +107,11 @@ public:
 
   bool is_DAG() const;
 
-  Digraph reverse() const;
+  Digraph reverse_digraph() const;
 
   std::vector<VertexID> reverse_post_ord() const;
 
   std::vector<VertexID> post_ord() const;
+
+  std::vector<int64_t> kosaraju_shrir_scc() const;
 };
