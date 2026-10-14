@@ -29,12 +29,12 @@ protected:
                    std::vector<VertexID> &connected_components) const;
 
   void dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
-                            std::stack<VertexID> &reverse_post_ord) const;
+                            std::stack<VertexID> &post_ord) const;
 
   void dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
-                       std::vector<VertexID> edge_to,
-                       std::vector<bool> on_stack,
-                       std::stack<VertexID> cycle) const;
+                       std::vector<VertexID> &edge_to,
+                       std::vector<bool> &on_stack,
+                       std::stack<VertexID> &cycle) const;
 
 public:
   Digraph();

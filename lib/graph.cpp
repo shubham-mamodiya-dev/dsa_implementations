@@ -285,9 +285,9 @@ std::vector<VertexID> Graph::get_cycle() const {
   return copy_cycle;
 }
 void Graph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
-                            std::vector<VertexID> edge_to,
-                            std::vector<bool> on_stack,
-                            std::stack<VertexID> cycle) const {
+                            std::vector<VertexID> &edge_to,
+                            std::vector<bool> &on_stack,
+                            std::stack<VertexID> &cycle) const {
 
   on_stack[v] = true;
   marked[v] = true;

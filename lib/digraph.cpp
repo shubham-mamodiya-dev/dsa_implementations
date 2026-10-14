@@ -260,25 +260,24 @@ void Digraph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
   }
 }
 
-void Digraph::dfs_reverse_post_ord(
-    const VertexID v, std::vector<bool> &marked,
-    std::stack<VertexID> &reverse_post_ord) const {
+void Digraph::dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
+                                   std::stack<VertexID> &post_ord) const {
 
   marked[v] = true;
 
   for (const auto x : this->adj[v]) {
     if (!marked[x]) {
-      this->dfs_reverse_post_ord(x, marked, reverse_post_ord);
+      this->dfs_reverse_post_ord(x, marked, post_ord);
     }
   }
 
-  reverse_post_ord.push(v);
+  post_ord.push(v);
 }
 
 void Digraph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
-                              std::vector<VertexID> edge_to,
-                              std::vector<bool> on_stack,
-                              std::stack<VertexID> cycle) const {
+                              std::vector<VertexID> &edge_to,
+                              std::vector<bool> &on_stack,
+                              std::stack<VertexID> &cycle) const {
 
   on_stack[v] = true;
   marked[v] = true;
@@ -308,22 +307,22 @@ std::vector<VertexID> Digraph::topological_sort() const {
     return {};
   }
 
-  std::stack<VertexID> reverse_post_ord{};
+  std::stack<VertexID> post_order{};
   std::vector<bool> marked(this->total_vertices(), false);
   for (VertexID i{}; i < this->total_vertices() && this->is_valid_vertex(i);
        ++i) {
     if (!marked[i]) {
-      this->dfs_reverse_post_ord(i, marked, reverse_post_ord);
+      this->dfs_reverse_post_ord(i, marked, post_order);
     }
   }
 
-  std::vector<VertexID> copy_reverse_post_ord{};
-  while (!reverse_post_ord.empty()) {
-    copy_reverse_post_ord.push_back(reverse_post_ord.top());
-    reverse_post_ord.pop();
+  std::vector<VertexID> reverse_post_order{};
+  while (!post_order.empty()) {
+    reverse_post_order.push_back(post_order.top());
+    post_order.pop();
   }
 
-  return copy_reverse_post_ord;
+  return reverse_post_order;
 }
 bool Digraph::has_cycle() const { return get_cycle().empty(); }
 
