@@ -357,8 +357,17 @@ std::vector<VertexID> Digraph::post_ord() const {
 
   return post_order;
 }
+bool Digraph::is_strongly_connected(const VertexID v, const VertexID w) const {
+  if (!this->is_valid_vertex(v) || !this->is_valid_vertex(w)) {
+    return false;
+  }
 
-std::vector<int64_t> Digraph::kosaraju_shrir_scc() const {
+  auto scc = this->kosaraju_sharir_scc();
+
+  return scc[v] == scc[w];
+}
+
+std::vector<int64_t> Digraph::kosaraju_sharir_scc() const {
   std::vector<bool> marked(this->total_vertices(), false);
   std::vector<int64_t> scc(this->total_vertices());
   int64_t scc_id{};

@@ -40,6 +40,8 @@ protected:
                         std::vector<bool> &marked,
                         std::vector<int64_t> scc) const;
 
+  std::vector<int64_t> kosaraju_sharir_scc() const;
+
 public:
   Digraph();
 
@@ -113,5 +115,5 @@ public:
 
   std::vector<VertexID> post_ord() const;
 
-  std::vector<int64_t> kosaraju_shrir_scc() const;
+  bool is_strongly_connected(const VertexID v, const VertexID w) const;
 };
