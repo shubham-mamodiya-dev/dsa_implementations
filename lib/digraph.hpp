@@ -29,7 +29,7 @@ protected:
                    std::vector<VertexID> &connected_components) const;
 
   void dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
-                            std::stack<VertexID> &post_ord) const;
+                            std::vector<VertexID> &post_ord) const;
 
   void dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
                        std::vector<VertexID> &edge_to,
@@ -104,4 +104,8 @@ public:
   bool is_DAG() const;
 
   Digraph reverse() const;
+
+  std::vector<VertexID> reverse_post_ord() const;
+
+  std::vector<VertexID> post_ord() const;
 };

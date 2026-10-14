@@ -261,7 +261,7 @@ void Digraph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
 }
 
 void Digraph::dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
-                                   std::stack<VertexID> &post_ord) const {
+                                   std::vector<VertexID> &post_ord) const {
 
   marked[v] = true;
 
@@ -271,7 +271,7 @@ void Digraph::dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
     }
   }
 
-  post_ord.push(v);
+  post_ord.push_back(v);
 }
 
 void Digraph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
@@ -306,23 +306,7 @@ std::vector<VertexID> Digraph::topological_sort() const {
   if (!this->is_DAG()) {
     return {};
   }
-
-  std::stack<VertexID> post_order{};
-  std::vector<bool> marked(this->total_vertices(), false);
-  for (VertexID i{}; i < this->total_vertices() && this->is_valid_vertex(i);
-       ++i) {
-    if (!marked[i]) {
-      this->dfs_reverse_post_ord(i, marked, post_order);
-    }
-  }
-
-  std::vector<VertexID> reverse_post_order{};
-  while (!post_order.empty()) {
-    reverse_post_order.push_back(post_order.top());
-    post_order.pop();
-  }
-
-  return reverse_post_order;
+  return this->reverse_post_ord();
 }
 bool Digraph::has_cycle() const { return get_cycle().empty(); }
 
@@ -340,6 +324,24 @@ Digraph Digraph::reverse() const {
   }
 
   return reversed;
+}
+std::vector<VertexID> Digraph::reverse_post_ord() const {
+  std::vector<VertexID> post_order(this->post_ord());
+  std::reverse(post_order.begin(), post_order.end());
+  return post_order;
+}
+
+std::vector<VertexID> Digraph::post_ord() const {
+  std::vector<VertexID> post_order{};
+  std::vector<bool> marked(this->total_vertices(), false);
+  for (VertexID i{}; i < this->total_vertices() && this->is_valid_vertex(i);
+       ++i) {
+    if (!marked[i]) {
+      this->dfs_reverse_post_ord(i, marked, post_order);
+    }
+  }
+
+  return post_order;
 }
 
 std::vector<VertexID> Digraph::get_cycle() const {
