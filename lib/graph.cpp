@@ -257,3 +257,57 @@ void Graph::dfs_crawler(const VertexID v, std::vector<bool> &marked,
     }
   }
 }
+
+bool Graph::has_cycle() const { return !get_cycle().empty(); }
+
+std::vector<VertexID> Graph::get_cycle() const {
+  std::vector<bool> on_stack(this->total_vertices(), false);
+  std::vector<bool> marked(this->total_vertices(), false);
+  std::vector<VertexID> edge_to(this->total_vertices());
+  std::stack<VertexID> cycle{};
+
+  for (int i = 0; i < this->total_vertices(); ++i) {
+    edge_to[i] = i;
+  }
+
+  for (VertexID i = 0; i < this->total_vertices(); ++i) {
+    if (!marked[i] && !this->is_reusable(i)) {
+      this->dfs_find_cycles(i, marked, edge_to, on_stack, cycle);
+    }
+  }
+
+  std::vector<VertexID> copy_cycle{};
+  while (!cycle.empty()) {
+    copy_cycle.push_back(cycle.top());
+    cycle.pop();
+  }
+
+  return copy_cycle;
+}
+void Graph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
+                            std::vector<VertexID> edge_to,
+                            std::vector<bool> on_stack,
+                            std::stack<VertexID> cycle) const {
+
+  on_stack[v] = true;
+  marked[v] = true;
+
+  for (auto const w : this->adjacent_vertices(v)) {
+    bool found_cycle{!cycle.empty()};
+    if (found_cycle) {
+      return;
+    } else if (!marked[w]) {
+      edge_to[w] = v;
+      this->dfs_find_cycles(w, marked, edge_to, on_stack, cycle);
+    } else if (on_stack[w]) {
+      cycle = std::stack<VertexID>{};
+      for (VertexID x = v; x != w; x = edge_to[w]) {
+        cycle.push(x);
+      }
+      cycle.push(w);
+      cycle.push(v);
+    }
+  }
+
+  on_stack[v] = false;
+}

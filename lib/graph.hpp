@@ -29,6 +29,11 @@ protected:
   void dfs_crawler(const VertexID v, std::vector<bool> &marked,
                    std::vector<VertexID> &connected_components) const;
 
+  void dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
+                       std::vector<VertexID> edge_to,
+                       std::vector<bool> on_stack,
+                       std::stack<VertexID> cycle) const;
+
 public:
   Graph();
 
@@ -86,4 +91,8 @@ public:
 
   std::vector<VertexID> all_connected_vertices(const VertexID v) const;
   bool is_valid_vertex(const VertexID v) const;
+
+  bool has_cycle() const;
+
+  std::vector<VertexID> get_cycle() const;
 };

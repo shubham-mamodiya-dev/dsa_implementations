@@ -31,6 +31,11 @@ protected:
   void dfs_reverse_post_ord(const VertexID v, std::vector<bool> &marked,
                             std::stack<VertexID> &reverse_post_ord) const;
 
+  void dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
+                       std::vector<VertexID> edge_to,
+                       std::vector<bool> on_stack,
+                       std::stack<VertexID> cycle) const;
+
 public:
   Digraph();
 
@@ -91,4 +96,8 @@ public:
   bool is_valid_vertex(const VertexID v) const;
 
   std::vector<VertexID> topological_sort() const;
+
+  bool has_cycle() const;
+
+  std::vector<VertexID> get_cycle() const;
 };
