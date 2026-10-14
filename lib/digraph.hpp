@@ -100,4 +100,6 @@ public:
   bool has_cycle() const;
 
   std::vector<VertexID> get_cycle() const;
+
+  bool is_DAG() const;
 };

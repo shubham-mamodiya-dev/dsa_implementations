@@ -304,6 +304,10 @@ void Digraph::dfs_find_cycles(const VertexID v, std::vector<bool> &marked,
 }
 
 std::vector<VertexID> Digraph::topological_sort() const {
+  if (!this->is_DAG()) {
+    return {};
+  }
+
   std::stack<VertexID> reverse_post_ord{};
   std::vector<bool> marked(this->total_vertices(), false);
   for (VertexID i{}; i < this->total_vertices() && this->is_valid_vertex(i);
@@ -322,6 +326,8 @@ std::vector<VertexID> Digraph::topological_sort() const {
   return copy_reverse_post_ord;
 }
 bool Digraph::has_cycle() const { return get_cycle().empty(); }
+
+bool Digraph::is_DAG() const { return !this->has_cycle(); }
 
 std::vector<VertexID> Digraph::get_cycle() const {
   std::vector<bool> on_stack(this->total_vertices(), false);
